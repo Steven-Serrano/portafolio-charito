@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charito Luna | Bartender & Barista</title>
+    <!-- Favicon de taza de café (No requiere archivos extra) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0e0e0e;
+            --bg-card: #1a1a1a;
+            --bg-card-2: #222222;
+            --gold: #d4a574;
+            --gold-light: #e8c9a0;
+            --gold-dark: #a67c52;
+            --accent: #c94c4c;
+            --whatsapp: #25D366;
+            --text: #f0ede6;
+            --text-muted: #a8a8a8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(212, 165, 116, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(201, 76, 76, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: rgba(14, 14, 14, 0.9) !important;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(212, 165, 116, 0.2);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 1.6rem;
+            color: var(--gold) !important;
+            letter-spacing: 1px;
+        }
+        .navbar-brand span { color: var(--text); font-weight: 400; }
+        .nav-link {
+            color: var(--text) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -4px; left: 50%;
+            width: 0; height: 2px; background: var(--gold);
+            transition: all 0.3s; transform: translateX(-50%);
+        }
+        .nav-link:hover { color: var(--gold) !important; }
+        .nav-link:hover::after { width: 70%; }
+        
+        .navbar-toggler { border-color: var(--gold); }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(212, 165, 116, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 120px 0 60px;
+            z-index: 1;
+        }
+        .hero-img-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .hero-img-wrapper::before {
+            content: ''; position: absolute;
+            top: -15px; left: -15px; right: 15px; bottom: 15px;
+            border: 2px solid var(--gold); z-index: -1;
+        }
+        .hero-img-wrapper::after {
+            content: ''; position: absolute;
+            top: 15px; left: 15px; right: -15px; bottom: -15px;
+            background: var(--accent); opacity: 0.3; z-index: -1;
+        }
+        .hero-img {
+            width: 100%; max-width: 420px; height: auto;
+            filter: grayscale(20%) contrast(1.05);
+            transition: all 0.5s;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+        .hero-img:hover {
+            filter: grayscale(0%) contrast(1.1);
+            transform: translateY(-5px);
+        }
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            line-height: 1; margin-bottom: 1rem;
+        }
+        .hero-title .accent { color: var(--gold); font-style: italic; }
+        .hero-subtitle {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            color: var(--gold-light); margin-bottom: 1.5rem;
+        }
+        .hero-text {
+            color: var(--text-muted);
+            font-size: 1.05rem; max-width: 500px; margin-bottom: 2rem;
+        }
+
+        /* BOTONES */
+        .btn-gold {
+            background: var(--gold); color: var(--bg-dark); border: none;
+            padding: 0.8rem 2rem; font-weight: 600; letter-spacing: 1px;
+            text-transform: uppercase; font-size: 0.85rem; border-radius: 0;
+            transition: all 0.3s;
+        }
+        .btn-gold:hover {
+            background: var(--gold-light); color: var(--bg-dark);
+            transform: translateY(-2px); box-shadow: 0 10px 30px rgba(212, 165, 116, 0.3);
+        }
+        .btn-outline-gold {
+            background: transparent; color: var(--gold); border: 2px solid var(--gold);
+            padding: 0.75rem 1.9rem; font-weight: 600; letter-spacing: 1px;
+            text-transform: uppercase; font-size: 0.85rem; border-radius: 0;
+            transition: all 0.3s;
+        }
+        .btn-outline-gold:hover {
+            background: var(--gold); color: var(--bg-dark);
+        }
+        .btn-whatsapp {
+            background: var(--whatsapp); color: #fff; border: none;
+            padding: 0.8rem 2rem; font-weight: 600; letter-spacing: 1px;
+            text-transform: uppercase; font-size: 0.85rem; border-radius: 0;
+            transition: all 0.3s;
+        }
+        .btn-whatsapp:hover {
+            background: #1ebe57; color: #fff;
+            transform: translateY(-2px); box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+        }
+
+        /* SECCIONES */
+        section { padding: 100px 0; position: relative; z-index: 1; }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900; font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem;
+        }
+        .section-title .accent { color: var(--gold); font-style: italic; }
+        .section-subtitle {
+            font-family: 'Caveat', cursive; color: var(--gold-light);
+            font-size: 1.4rem; margin-bottom: 3rem;
+        }
+        .divider { width: 80px; height: 3px; background: var(--gold); margin-bottom: 2rem; }
+
+        /* SOBRE MÍ */
+        .about-card {
+            background: var(--bg-card); border-left: 4px solid var(--gold);
+            padding: 2.5rem; position: relative;
+        }
+        .about-card::before {
+            content: '"'; position: absolute; top: -20px; left: 20px;
+            font-family: 'Playfair Display', serif; font-size: 6rem;
+            color: var(--gold); opacity: 0.3; line-height: 1;
+        }
+        .about-text { font-size: 1.1rem; line-height: 1.8; color: var(--text-muted); }
+        .about-text strong { color: var(--gold-light); }
+        .info-box {
+            background: var(--bg-card-2); padding: 1.5rem;
+            border: 1px solid rgba(212, 165, 116, 0.2); margin-top: 1rem;
+        }
+        .info-box .label {
+            color: var(--gold); font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.3rem;
+        }
+        .info-box .value { font-size: 1rem; color: var(--text); }
+
+        /* EXPERIENCIA */
+        .experience-card {
+            background: var(--bg-card); padding: 2rem; margin-bottom: 1.5rem;
+            border: 1px solid rgba(212, 165, 116, 0.15); transition: all 0.4s;
+            position: relative; overflow: hidden;
+        }
+        .experience-card::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 4px; height: 100%; background: var(--gold);
+            transform: scaleY(0); transform-origin: top; transition: transform 0.4s;
+        }
+        .experience-card:hover { transform: translateX(10px); border-color: var(--gold); }
+        .experience-card:hover::before { transform: scaleY(1); }
+        .exp-date {
+            color: var(--gold); font-size: 0.85rem;
+            letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.5rem;
+        }
+        .exp-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem; font-weight: 700; margin-bottom: 0.3rem;
+        }
+        .exp-place { color: var(--text-muted); font-style: italic; margin-bottom: 1rem; }
+        .exp-desc { color: var(--text-muted); line-height: 1.7; }
+
+        /* HABILIDADES */
+        .skill-item { margin-bottom: 1.8rem; }
+        .skill-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        .skill-name { font-weight: 600; font-size: 0.95rem; }
+        .skill-bar { height: 8px; background: var(--bg-card-2); overflow: hidden; position: relative; }
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+            width: 0; transition: width 1.5s ease;
+        }
+
+        /* FORMACIÓN */
+        .edu-card {
+            background: var(--bg-card); padding: 2rem; border-top: 3px solid var(--gold);
+            height: 100%; transition: all 0.3s;
+        }
+        .edu-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(212, 165, 116, 0.15);
+        }
+        .edu-year {
+            display: inline-block; background: var(--gold); color: var(--bg-dark);
+            padding: 0.3rem 1rem; font-size: 0.8rem; font-weight: 700;
+            letter-spacing: 1px; margin-bottom: 1rem;
+        }
+        .edu-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem;
+        }
+        .edu-place { color: var(--gold-light); font-size: 0.9rem; margin-bottom: 1rem; }
+        .edu-desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+
+        /* INTERESES */
+        .interest-item {
+            background: var(--bg-card); padding: 1.5rem; text-align: center;
+            border: 1px solid rgba(212, 165, 116, 0.15); transition: all 0.3s; height: 100%;
+        }
+        .interest-item:hover { border-color: var(--gold); transform: translateY(-5px); }
+        .interest-icon { font-size: 2rem; color: var(--gold); margin-bottom: 1rem; }
+        .interest-text { color: var(--text); font-size: 0.95rem; }
+
+        /* CONTACTO */
+        .contact-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0e0e0e 100%);
+            border-top: 1px solid rgba(212, 165, 116, 0.2);
+        }
+        .contact-item { display: flex; align-items: center; margin-bottom: 1.5rem; }
+        .contact-icon {
+            width: 50px; height: 50px; background: var(--gold); color: var(--bg-dark);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; margin-right: 1rem; flex-shrink: 0;
+        }
+        .contact-info .label {
+            color: var(--gold); font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+        .contact-info .value { color: var(--text); font-size: 1.05rem; }
+        .contact-info a { color: var(--text); text-decoration: none; transition: color 0.3s; }
+        .contact-info a:hover { color: var(--gold); }
+
+        /* FOOTER */
+        footer {
+            background: #050505; padding: 2rem 0; text-align: center;
+            border-top: 1px solid rgba(212, 165, 116, 0.2);
+        }
+        footer p { color: var(--text-muted); margin: 0; font-size: 0.9rem; }
+        footer .heart { color: var(--accent); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero { text-align: center; padding-top: 100px; }
+            .hero-img-wrapper { margin-bottom: 2rem; }
+            .hero-text { margin: 0 auto 2rem; }
+            .about-card { padding: 1.5rem; }
+        }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--gold-dark); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Charito<span>.Luna</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#sobre-mi">Sobre mí</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#experiencia">Experiencia</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#habilidades">Habilidades</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#formacion">Formación</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="inicio">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
+                    <div class="text-center text-lg-start">
+                        <div class="hero-img-wrapper d-inline-block">
+                            <img src="charito.png" alt="Charol Jhoanna Luna Gomez" class="hero-img">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-1">
+                    <p class="hero-subtitle">~ Bartender & Barista ~</p>
+                    <h1 class="hero-title">
+                        Charol <span class="accent">Jhoanna</span><br>
+                        Luna <span class="accent">Gómez</span>
+                    </h1>
+                    <p class="hero-text">
+                        Técnica en Servicios de Barismo con pasión por crear experiencias únicas a través de cada bebida. 
+                        Combino técnica, creatividad y un estilo auténtico para ofrecer un servicio excepcional.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                        <a href="#contacto" class="btn btn-gold">Contáctame</a>
+                        <a href="CV.pdf" target="_blank" class="btn btn-outline-gold">
+                            <i class="fa-solid fa-file-pdf"></i> Ver Hoja de Vida
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOBRE MÍ -->
+    <section id="sobre-mi">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h2 class="section-title">Sobre <span class="accent">mí</span></h2>
+                    <div class="divider"></div>
+                    <p class="section-subtitle">19 años · Garzón, Huila</p>
+                </div>
+                <div class="col-lg-8">
+                    <div class="about-card">
+                        <p class="about-text">
+                            Soy <strong>Charol Jhoanna</strong>, conocida como <strong>Charito</strong>. Técnica en Servicios de Barismo del SENA con casi 2 años de experiencia en cafeterías. Cuento con formación en preparación de bebidas bajo estándares internacionales, manejo de equipos y estrictas prácticas de higiene. Poseo <strong>inglés nivel pre-intermedio</strong> para la atención a diversos públicos.
+                            <br><br>
+                            Me destaco por mi <strong>responsabilidad, trabajo en equipo y actitud de servicio</strong>, buscando aportar mi compromiso y habilidades en bares, restaurantes, hoteles o eventos. Mi estilo alternativo refleja mi autenticidad, pero mi profesionalismo habla por sí solo en cada bebida que preparo.
+                        </p>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="info-box">
+                                <div class="label">Ubicación</div>
+                                <div class="value"><i class="fa-solid fa-location-dot" style="color: var(--gold);"></i> Garzón, Huila</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="info-box">
+                                <div class="label">Experiencia</div>
+                                <div class="value"><i class="fa-solid fa-mug-hot" style="color: var(--gold);"></i> ~2 años</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="info-box">
+                                <div class="label">Idioma</div>
+                                <div class="value"><i class="fa-solid fa-language" style="color: var(--gold);"></i> Inglés B1</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERIENCIA -->
+    <section id="experiencia" style="background: rgba(26, 26, 26, 0.5);">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Mi <span class="accent">Experiencia</span></h2>
+                <div class="divider mx-auto"></div>
+                <p class="section-subtitle">Un recorrido por mi trayectoria</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="experience-card">
+                        <div class="exp-date">Dic. 2025 - Actualidad</div>
+                        <h3 class="exp-title">Barista / Mesera</h3>
+                        <p class="exp-place"><i class="fa-solid fa-store"></i> Cafe 41 · Garzón, Huila</p>
+                        <p class="exp-desc">Gestión integral del servicio de bar, incluyendo la creación de bebidas de especialidad, control de inventario de insumos y aplicación de normas de seguridad y salud en el trabajo. Atención y asesoría a clientes, garantizando una experiencia de servicio excepcional.</p>
+                    </div>
+
+                    <div class="experience-card">
+                        <div class="exp-date">Jun. 2025 - Nov. 2025</div>
+                        <h3 class="exp-title">Barista / Mesera</h3>
+                        <p class="exp-place"><i class="fa-solid fa-store"></i> El Desarrollo · Garzón, Huila</p>
+                        <p class="exp-desc">Preparación de bebidas a base de café espresso aplicando criterios internacionales. Calibración diaria de molinos, control de calidad en la extracción, atención personalizada al cliente y mantenimiento preventivo de los equipos de barismo.</p>
+                    </div>
+
+                    <div class="experience-card">
+                        <div class="exp-date">Nov. 2024 - Abr. 2025</div>
+                        <h3 class="exp-title">Barista (Practicante SENA)</h3>
+                        <p class="exp-place"><i class="fa-solid fa-store"></i> Villamacaru · Garzón, Huila</p>
+                        <p class="exp-desc">Etapa práctica de 6 meses exigida por el SENA. Apoyo en la preparación y presentación de bebidas, atención directa al cliente, organización y rotación de insumos, y aplicación estricta de las buenas prácticas de higiene y manipulación de alimentos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HABILIDADES -->
+    <section id="habilidades">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 mb-5 mb-lg-0">
+                    <h2 class="section-title">Mis <span class="accent">Habilidades</span></h2>
+                    <div class="divider"></div>
+                    <p class="section-subtitle">Lo que domino con pasión</p>
+                    <p class="about-text">
+                        Cada habilidad ha sido pulida con práctica, dedicación y amor por el oficio. Desde la técnica perfecta del espresso hasta la atención cálida al cliente.
+                    </p>
+                </div>
+                <div class="col-lg-7">
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name"><i class="fa-solid fa-mug-hot" style="color: var(--gold);"></i> Preparación de bebidas</span>
+                            <span class="skill-name">95%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-progress" data-width="95"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name"><i class="fa-solid fa-heart" style="color: var(--gold);"></i> Atención al cliente</span>
+                            <span class="skill-name">90%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-progress" data-width="90"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name"><i class="fa-solid fa-hands-bubbles" style="color: var(--gold);"></i> Higiene y organización</span>
+                            <span class="skill-name">95%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-progress" data-width="95"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name"><i class="fa-solid fa-users" style="color: var(--gold);"></i> Trabajo en equipo</span>
+                            <span class="skill-name">90%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-progress" data-width="90"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name"><i class="fa-solid fa-comments" style="color: var(--gold);"></i> Comunicación efectiva</span>
+                            <span class="skill-name">85%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-progress" data-width="85"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name"><i class="fa-solid fa-clock" style="color: var(--gold);"></i> Responsabilidad y puntualidad</span>
+                            <span class="skill-name">100%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-progress" data-width="100"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FORMACIÓN -->
+    <section id="formacion" style="background: rgba(26, 26, 26, 0.5);">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Mi <span class="accent">Formación</span></h2>
+                <div class="divider mx-auto"></div>
+                <p class="section-subtitle">Educación que respalda mi pasión</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="edu-card">
+                        <span class="edu-year">2025</span>
+                        <h4 class="edu-title">Técnico en Servicios de Barismo</h4>
+                        <p class="edu-place"><i class="fa-solid fa-graduation-cap"></i> SENA · Garzón, Huila</p>
+                        <p class="edu-desc">Formación técnica en preparación y presentación de bebidas, servicio de bar, atención al cliente y buenas prácticas de higiene.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="edu-card">
+                        <span class="edu-year">2025</span>
+                        <h4 class="edu-title">Bebidas a base de Espresso</h4>
+                        <p class="edu-place"><i class="fa-solid fa-graduation-cap"></i> SENA · Garzón, Huila</p>
+                        <p class="edu-desc">Preparación de bebidas basadas en café espresso bajo criterios internacionales y normativos establecidos.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="edu-card">
+                        <span class="edu-year">2024</span>
+                        <h4 class="edu-title">Inglés Pre-Intermedio (B1)</h4>
+                        <p class="edu-place"><i class="fa-solid fa-language"></i> SENA · Garzón, Huila</p>
+                        <p class="edu-desc">Comprensión y uso de expresiones cotidianas en inglés según el Marco Común Europeo de Referencia (MCER).</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="edu-card">
+                        <span class="edu-year">2024</span>
+                        <h4 class="edu-title">Bachiller Académico</h4>
+                        <p class="edu-place"><i class="fa-solid fa-school"></i> I.E. Jenaro Díaz Jordán</p>
+                        <p class="edu-desc">Formación académica completa en Garzón, Huila, con énfasis en desarrollo integral y competencias ciudadanas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERESES -->
+    <section id="intereses">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Mis <span class="accent">Intereses</span></h2>
+                <div class="divider mx-auto"></div>
+                <p class="section-subtitle">Lo que me apasiona cada día</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="interest-item">
+                        <div class="interest-icon"><i class="fa-solid fa-martini-glass"></i></div>
+                        <p class="interest-text">Preparación de bebidas</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="interest-item">
+                        <div class="interest-icon"><i class="fa-solid fa-face-smile"></i></div>
+                        <p class="interest-text">Atención al cliente</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="interest-item">
+                        <div class="interest-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+                        <p class="interest-text">Organización de bar</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="interest-item">
+                        <div class="interest-icon"><i class="fa-solid fa-broom"></i></div>
+                        <p class="interest-text">Higiene y limpieza</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="interest-item">
+                        <div class="interest-icon"><i class="fa-solid fa-people-group"></i></div>
+                        <p class="interest-text">Trabajo en equipo</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="interest-item">
+                        <div class="interest-icon"><i class="fa-solid fa-gem"></i></div>
+                        <p class="interest-text">Estilo auténtico</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contacto" class="contact-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 mb-5 mb-lg-0">
+                    <h2 class="section-title">Hablemos <span class="accent">☕</span></h2>
+                    <div class="divider"></div>
+                    <p class="section-subtitle">¿Listo para una experiencia única?</p>
+                    <p class="about-text">
+                        Estoy disponible para oportunidades en bares, restaurantes, hoteles o eventos. Si buscas una bartender/barista comprometida, creativa y con estilo, ¡escríbeme!
+                    </p>
+                    <div class="mt-4 d-flex flex-wrap gap-2">
+                        <!-- Botón de WhatsApp -->
+                        <a href="https://wa.me/573228081639?text=Hola%20Charito,%20vi%20tu%20portafolio%20y%20estoy%20interesado%20en%20tu%20perfil%20para%20una%20oportunidad%20laboral." target="_blank" class="btn btn-whatsapp mb-2">
+                            <i class="fa-brands fa-whatsapp"></i> Escribir por WhatsApp
+                        </a>
+                        <!-- Botón de Correo (Enlace directo a Gmail) -->
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=charolluna7@gmail.com&su=Oportunidad%20Laboral%20-%20Charito%20Luna&body=Hola%20Charito,%20me%20gustaría%20contactarte%20respecto%20a%20una%20oportunidad%20laboral." target="_blank" class="btn btn-outline-gold mb-2">
+                            <i class="fa-solid fa-envelope"></i> Enviar Correo
+                        </a>
+                        <!-- Botón de Descargar CV -->
+                        <a href="CV.pdf" download="CV_Charol_Luna.pdf" class="btn btn-gold mb-2">
+                            <i class="fa-solid fa-file-arrow-down"></i> Descargar CV
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="contact-item">
+                                <div class="contact-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                                <div class="contact-info">
+                                    <div class="label">WhatsApp</div>
+                                    <div class="value"><a href="https://wa.me/573228081639" target="_blank">322 808 1639</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="contact-item">
+                                <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+                                <div class="contact-info">
+                                    <div class="label">Email</div>
+                                    <div class="value"><a href="https://mail.google.com/mail/?view=cm&fs=1&to=charolluna7@gmail.com" target="_blank">charolluna7@gmail.com</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="contact-item">
+                                <div class="contact-icon"><i class="fa-solid fa-file-pdf"></i></div>
+                                <div class="contact-info">
+                                    <div class="label">Hoja de Vida</div>
+                                    <div class="value"><a href="CV.pdf" target="_blank">Ver / Descargar PDF</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="contact-item">
+                                <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+                                <div class="contact-info">
+                                    <div class="label">Ubicación</div>
+                                    <div class="value">Garzón, Huila, Colombia</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p style="font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold); margin-bottom: 0.5rem;">Charito Luna</p>
+            <p>Bartender & Barista · Hecho con <span class="heart">♥</span> y mucho café ☕</p>
+            <p style="font-size: 0.8rem; margin-top: 0.5rem;">© 2026 · Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Animación de barras de habilidades al hacer scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bars = entry.target.querySelectorAll('.skill-progress');
+                    bars.forEach(bar => {
+                        const width = bar.getAttribute('data-width');
+                        bar.style.width = width + '%';
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const skillsSection = document.getElementById('habilidades');
+        if (skillsSection) observer.observe(skillsSection);
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                // Cerrar menú móvil
+                const navCollapse = document.getElementById('navMenu');
+                if (navCollapse.classList.contains('show')) {
+                    new bootstrap.Collapse(navCollapse).hide();
+                }
+            });
+        });
+
+        // Navbar cambia al hacer scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.padding = '0.5rem 0';
+                navbar.style.boxShadow = '0 5px 20px rgba(0,0,0,0.5)';
+            } else {
+                navbar.style.padding = '1rem 0';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
